@@ -10,7 +10,7 @@ function index(req, res) {
     if (err) { return console.log(err); }
     res.json(albums);
   });
-}
+};
 
 function create(req, res) {
   var newAlbum = new db.Album({

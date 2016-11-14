@@ -13,7 +13,7 @@ $(document).ready(function() {
     url: '/api/albums',
     success: renderAllAlbums,
     error: onError
-  })
+  });
 
   $('#newAlbumForm').on('submit', function(event) {
     event.preventDefault();
@@ -27,6 +27,14 @@ $(document).ready(function() {
     $('#newAlbumForm > input').val('');
   });
 
+  $('#albums').on('click', '.add-song', function() {
+    console.log('add-song was clicked');
+    var id = $(this).closest('.album').data('album-id');
+    console.log('id', id);
+    $('#songModal').data('album-id', id);
+  });
+
+
 });
 
 
@@ -39,12 +47,12 @@ function renderAlbum(album) {
   var albumsSource = $('#albumsTemplate').html();
   var albumsTemplate = Handlebars.compile(albumsSource);
   var albumsHtml = albumsTemplate(album);
-  $('#albums').append(albumsHtml);
-}
+  $('#albums').prepend(albumsHtml);
+};
 
 function renderAllAlbums(json) {
   json.forEach(renderAlbum);
-}
+};
 
 function onError(xhr, status, errorThrown) {
   alert('Sorry, there was a problem!');
@@ -55,5 +63,9 @@ function onError(xhr, status, errorThrown) {
 
 function addNewAlbum(json) {
   renderAlbum(json);
+};
+
+function handleNewSongSubmit() {
+
 };
 
