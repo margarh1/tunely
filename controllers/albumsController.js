@@ -13,8 +13,21 @@ function index(req, res) {
 }
 
 function create(req, res) {
-  // FILL ME IN !
-}
+  var newAlbum = new db.Album({
+    name: req.body.name,
+    artistName: req.body.artistName,
+    releaseDate: req.body.releaseDate,
+    genres: []
+  });
+
+  var genresArray = req.body.genres.split(', ');
+  newAlbum.genres = genresArray;
+  newAlbum.save(function(err, album) {
+    if (err) { return console.log('error creating ' + album)};
+    console.log('created ' + album);
+    res.json(album);
+  })
+};
 
 function show(req, res) {
   // FILL ME IN !

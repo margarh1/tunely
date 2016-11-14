@@ -5,38 +5,6 @@
  *
  */
 
-
-// /* hard-coded data! */
-// var sampleAlbums = [];
-// sampleAlbums.push({
-//              artistName: 'Ladyhawke',
-//              name: 'Ladyhawke',
-//              releaseDate: '2008, November 18',
-//              genres: [ 'new wave', 'indie rock', 'synth pop' ]
-//            });
-// sampleAlbums.push({
-//              artistName: 'The Knife',
-//              name: 'Silent Shout',
-//              releaseDate: '2006, February 17',
-//              genres: [ 'synth pop', 'electronica', 'experimental' ]
-//            });
-// sampleAlbums.push({
-//              artistName: 'Juno Reactor',
-//              name: 'Shango',
-//              releaseDate: '2000, October 9',
-//              genres: [ 'electronic', 'goa trance', 'tribal house' ]
-//            });
-// sampleAlbums.push({
-//              artistName: 'Philip Wesley',
-//              name: 'Dark Night of the Soul',
-//              releaseDate: '2008, September 12',
-//              genres: [ 'piano' ]
-//            });
-// /* end of hard-coded data */
-
-
-
-
 $(document).ready(function() {
   console.log('app.js loaded!');
 
@@ -44,8 +12,20 @@ $(document).ready(function() {
     method: 'GET',
     url: '/api/albums',
     success: renderAllAlbums,
-    error: console.log('Error')
+    error: onError
   })
+
+  $('#newAlbumForm').on('submit', function(event) {
+    event.preventDefault();
+    $.ajax({
+      method: 'POST',
+      url: '/api/albums',
+      data: $(this).serialize(),
+      success: addNewAlbum,
+      error: onError
+    });
+    $('#newAlbumForm > input').val('');
+  });
 
 });
 
@@ -55,7 +35,7 @@ $(document).ready(function() {
 
 // this function takes a single album and renders it to the page
 function renderAlbum(album) {
-  console.log('rendering album:', album);
+  // console.log('rendering album:', album);
   var albumsSource = $('#albumsTemplate').html();
   var albumsTemplate = Handlebars.compile(albumsSource);
   var albumsHtml = albumsTemplate(album);
@@ -65,4 +45,15 @@ function renderAlbum(album) {
 function renderAllAlbums(json) {
   json.forEach(renderAlbum);
 }
+
+function onError(xhr, status, errorThrown) {
+  alert('Sorry, there was a problem!');
+  console.log('Error: ' + errorThrown);
+  console.log('Status: ' + status);
+  console.dir(xhr);
+};
+
+function addNewAlbum(json) {
+  renderAlbum(json);
+};
 
