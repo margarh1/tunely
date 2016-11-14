@@ -27,12 +27,13 @@ app.get('/', function homepage (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
 /*
  * JSON API Endpoints
  */
 
 app.get('/api', controllers.api.index);
+
+app.get('/api/albums', controllers.albums.index);
 
 /**********
  * SERVER *
