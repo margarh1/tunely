@@ -39,6 +39,7 @@ app.get('/api/albums', controllers.albums.index);
 app.post('/api/albums', controllers.albums.create);
 app.get('/api/albums/:id', controllers.albums.show);
 app.post('/api/albums/:id', controllers.albums.update);
+app.delete('/api/albums/:id', controllers.albums.destroy);
 
 /**********
  * SERVER *
