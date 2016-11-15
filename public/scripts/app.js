@@ -49,6 +49,7 @@ $(document).ready(function() {
     });
     $('#songName').val('');
     $('#trackNumber').val('');
+    $('#songModal').modal('hide');
   });
 
 });
