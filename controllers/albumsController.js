@@ -45,7 +45,7 @@ function destroy(req, res) {
   });
 };
 
-function update(req, res) {
+function updateSong(req, res) {
   db.Album.findById(req.params.id, function(err, album) {
     if (err) { return console.log('error updating ' + album); }
     album.songs.push(req.body);
@@ -53,9 +53,13 @@ function update(req, res) {
       if (err) { return console.log('error updating ' + album); }
       console.log('updated ' + album);
       res.json(album);
-    })
-  })
-}
+    });
+  });
+};
+
+function update(req, res) {
+  console.log(req.body, req.params.id);
+};
 
 
 // export public methods here
@@ -64,5 +68,6 @@ module.exports = {
   create: create,
   show: show,
   destroy: destroy,
+  updateSong: updateSong,
   update: update
 };

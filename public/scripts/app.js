@@ -52,7 +52,6 @@ $(document).ready(function() {
   });
 
   $('#albums').on('click', '.delete-album', function() {
-    console.log('delete-album was clicked', $(this).closest('.album').attr('data-album-id'));
     var albumId = $(this).closest('.album').attr('data-album-id');
     $.ajax({
       method: 'DELETE',
@@ -62,13 +61,37 @@ $(document).ready(function() {
     });
   });
 
+  $('#albums').on('click', '.edit-album', function() {
+    console.log($(this).closest('.album').attr('data-album-id') +' was clicked');
+    $(this).text('Save Changes');
+    $(this).toggleClass('save-changes').removeClass('edit-album');
+    var inputSpans = $(this).closest('.album').find('.list-group span').slice(0,3);
+    for (var idx = 0; idx < inputSpans.length; idx++) {
+      var current = inputSpans[idx];
+      current.outerHTML = "<input class=" + current.className + "></input>";
+      $(this).closest('.album').find('input')[idx].defaultValue = current.textContent;
+    };
+  });
+
+  $('#albums').on('click', '.save-changes', function() {
+    console.log($(this).closest('.album').attr('data-album-id') + ' was clicked');
+    var albumId = $(this).closest('.album').attr('data-album-id');
+    console.log($(this).serialize());
+    // $.ajax({
+    //   method: 'PUT',
+    //   url: '/api/albums' + albumId,
+    //   data: $(this).serialize();
+    //   success: updateAlbumSuccess,
+    //   error: onError
+    // })
+  });
+
 });
 
 
 
 // this function takes a single album and renders it to the page
 function renderAlbum(album) {
-  // console.log('rendering album:', album);
   var albumsSource = $('#albumsTemplate').html();
   var albumsTemplate = Handlebars.compile(albumsSource);
   var albumsHtml = albumsTemplate(album);
