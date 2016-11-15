@@ -62,7 +62,6 @@ $(document).ready(function() {
   });
 
   $('#albums').on('click', '.edit-album', function() {
-    console.log($(this).closest('.album').attr('data-album-id') +' was clicked');
     $(this).text('Save Changes');
     $(this).toggleClass('save-changes').removeClass('edit-album');
     var inputSpans = $(this).closest('.album').find('.list-group span').slice(0,3);
@@ -74,16 +73,31 @@ $(document).ready(function() {
   });
 
   $('#albums').on('click', '.save-changes', function() {
-    console.log($(this).closest('.album').attr('data-album-id') + ' was clicked');
     var albumId = $(this).closest('.album').attr('data-album-id');
-    console.log($(this).serialize());
-    // $.ajax({
-    //   method: 'PUT',
-    //   url: '/api/albums' + albumId,
-    //   data: $(this).serialize();
-    //   success: updateAlbumSuccess,
-    //   error: onError
-    // })
+    var inputFields = $(this).closest('.album').find('.list-group input');
+    var updatedData = [];
+    for (input of inputFields) {
+      var value = encodeURIComponent(input.value);
+      switch (input.className) {
+        case ('album-name'):
+          updatedData.push('name=' + value);
+          break;
+        case ('artist-name'):
+          updatedData.push('artistName=' + value);
+          break;
+        case ('album-releaseDate'):
+          updatedData.push('releaseDate=' + value);
+          break;
+      };
+    };
+    updatedData = updatedData.join('&');
+    $.ajax({
+      method: 'PUT',
+      url: '/api/albums/' + albumId,
+      data: updatedData,
+      success: updateAlbumSuccess,
+      error: onError
+    });
   });
 
 });
@@ -124,6 +138,11 @@ function deletedAlbum() {
     success: renderAllAlbums,
     error: onError
   });
+};
+
+function updateAlbumSuccess(json) {
+  var oneAlbum = '.album[data-album-id*=' + json._id + ']';
+  $(oneAlbum).replaceWith(renderAlbum(json));
 };
 
 

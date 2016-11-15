@@ -47,7 +47,7 @@ function destroy(req, res) {
 
 function updateSong(req, res) {
   db.Album.findById(req.params.id, function(err, album) {
-    if (err) { return console.log('error updating ' + album); }
+    if (err) { return console.log('error updating ' + album + ' songs'); }
     album.songs.push(req.body);
     album.save(function(err, album) {
       if (err) { return console.log('error updating ' + album); }
@@ -58,7 +58,17 @@ function updateSong(req, res) {
 };
 
 function update(req, res) {
-  console.log(req.body, req.params.id);
+  db.Album.findById(req.params.id, function(err, album) {
+    if (err) { return console.log('error updating ' + album); }
+    album.name = req.body.name;
+    album.artistName = req.body.artistName;
+    album.releaseDate = req.body.releaseDate;
+    album.save(function(err, album) {
+      if (err) { return console.log('error updating ' + album); }
+      console.log('updated ' + album);
+      res.json(album);
+    });
+  });
 };
 
 
