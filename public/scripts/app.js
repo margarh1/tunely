@@ -30,14 +30,28 @@ $(document).ready(function() {
   $('#albums').on('click', '.add-song', function() {
     console.log('add-song was clicked');
     var id = $(this).closest('.album').data('album-id');
-    console.log('id', id);
-    $('#songModal').data('album-id', id);
+    $('#songModal').data('album-id', id).modal();
   });
 
+  $('#songModal').on('click', '#saveSong', function handleNewSongSubmit(event) {
+    event.preventDefault();
+    var albumId = $('#songModal').data('albumId');
+    var newSongToAlbum = '/api/albums/' + albumId;
+    var songName = 'name=' + $('#songName').val();
+    var trackNumber = $('#trackNumber').prop('name') + '=' + $('#trackNumber').val();
+    var modalData = songName + '&' + trackNumber;
+    $.ajax({
+      method: 'POST',
+      url: newSongToAlbum,
+      data: modalData,
+      success: addNewSong,
+      error: onError
+    });
+    $('#songName').val('');
+    $('#trackNumber').val('');
+  });
 
 });
-
-
 
 
 
@@ -65,7 +79,10 @@ function addNewAlbum(json) {
   renderAlbum(json);
 };
 
-function handleNewSongSubmit() {
-
+function addNewSong(json) {
+  renderAlbum(json);
 };
+
+
+
 

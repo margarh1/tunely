@@ -30,15 +30,26 @@ function create(req, res) {
 };
 
 function show(req, res) {
-  // FILL ME IN !
-}
+  db.Album.findById(req.params.id, function(err, album) {
+    if (err) { return console.log('error showing ' + album); }
+    res.json(album);
+  });
+};
 
 function destroy(req, res) {
   // FILL ME IN !
 }
 
 function update(req, res) {
-  // FILL ME IN !
+  db.Album.findById(req.params.id, function(err, album) {
+    if (err) { return console.log('error updating ' + album); }
+    album.songs.push(req.body);
+    album.save(function(err, album) {
+      if (err) { return console.log('error updating ' + album); }
+      console.log('updated ' + album);
+      res.json(album);
+    })
+  })
 }
 
 
